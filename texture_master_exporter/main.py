@@ -22,8 +22,13 @@ class exporterTextureMaster(DockWidget):
         #calls
         self.block_folder_path()
 
-        # Select Path to export files.
+        # Create a button to add boxes
+        self.addButton = QPushButton('Add Box', self)
+        self.addButton.clicked.connect(self.addBox)
+        self.main_layout.addWidget(self.addButton)
+
     def block_folder_path(self):
+        # Select Path to export files.
         app = Krita.instance()
         self.h_layout_folder_path = QHBoxLayout()
 
@@ -38,10 +43,6 @@ class exporterTextureMaster(DockWidget):
         self.h_layout_folder_path.addWidget(self.button_folder)
         self.main_layout.addLayout(self.h_layout_folder_path)
 
-        # # Create a button to add boxes
-        # self.addButton = QPushButton('Add Box', self)
-        # self.addButton.clicked.connect(self.addBox)
-        # self.main_layout.addWidget(self.addButton)    
 
     def selectFolder(self):
         options = QFileDialog.Options()
@@ -50,14 +51,14 @@ class exporterTextureMaster(DockWidget):
             print("Selected Folder:", folderPath)
 
     def addBox(self):
-
         box = AddComponent()
         # insert the box before the Add Box button and stretchable space
         self.main_layout.insertWidget(self.main_layout.count() - 2, box)
         box.deleteButton.clicked.connect(lambda: self.deleteBox(box))
 
     def deleteBox(self, box):
-        pass
+        box.setParent(None)
+        box.deleteLater()
 
     # 'pass' means do not do anything
     def canvasChanged(self, canvas):
