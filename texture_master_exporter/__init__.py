@@ -1,10 +1,10 @@
 from krita import DockWidgetFactory, DockWidgetFactoryBase
-from .docker_template import DockerTemplate
+from .main import exporterTextureMaster
 
-DOCKER_ID = 'template_docker'
+DOCKER_ID = 'texture_master_exporter_docker'
 instance = Krita.instance()
 dock_widget_factory = DockWidgetFactory(DOCKER_ID,
                                         DockWidgetFactoryBase.DockRight,
-                                        DockerTemplate)
+                                        exporterTextureMaster)
 
 instance.addDockWidgetFactory(dock_widget_factory)

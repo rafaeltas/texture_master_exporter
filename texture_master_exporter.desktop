@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Service
 ServiceTypes=Krita/PythonPlugin
-X-KDE-Library=docker_template
+X-KDE-Library=texture_master_exporter
 X-Python-2-Compatible=false
 X-Krita-Manual=Manual.html
-Name=docker_template
+Name=Texture Master Exporter
 Comment=Getting a docker set up
