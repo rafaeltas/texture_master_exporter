@@ -12,6 +12,7 @@ class AddComponent(QWidget):
         # Function Call
         self.texture_basic_info()
         self.texture_map_info()
+        self.texture_normal_info()
 
         self.deleteButton = QPushButton('Delete', self)
         self.layout_panel.addWidget(self.deleteButton)
@@ -50,6 +51,7 @@ class AddComponent(QWidget):
         self.map_types_list = ['None', 'Color', 'Normal', 'Roughness', 'Metallic', 'Ambient Occlusion', 'Height', 'Mask', 'Emissive']
         self.combo_box_map_type = QComboBox()
         self.combo_box_map_type.setCurrentIndex(0)
+        
         self.combo_box_map_type.currentIndexChanged.connect(self.comboBoxChanged)
         self.layout_texture_map_info.addWidget(self.combo_box_map_type)
 
@@ -63,6 +65,23 @@ class AddComponent(QWidget):
         self.checkbox_alpha.stateChanged.connect(self.alpha_toggle)
 
         self.layout_panel.addLayout(self.layout_texture_map_info)
+    
+    def comboBoxChanged(self):
+        pass
+
+    def texture_normal_info(self):
+        self.layout_texture_normal_info = QHBoxLayout()
+
+        self.titleLabel_normal = QLabel('Normals:', self)
+        self.layout_texture_normal_info.addWidget(self.titleLabel_normal)
+
+        self.titleLabel_normal_flip_x = QLabel('Flip X:', self)
+        self.layout_texture_normal_info.addWidget(self.titleLabel_normal_flip_x)
+
+        self.titleLabel_normal_flip_y = QLabel('Flip Y:', self)
+        self.layout_texture_normal_info.addWidget(self.titleLabel_normal_flip_y)
+
+        self.layout_panel.addLayout(self.layout_texture_normal_info)
 
     def alpha_toggle(self, state):
         if self.checkbox_alpha.isChecked() is True:
@@ -74,7 +93,6 @@ class AddComponent(QWidget):
             self.combo_box_map_type.clear() # Clear itens
             self.combo_box_map_type.addItems(self.map_types_list)
 
-    def comboBoxChanged(self):
-        pass
+
 
 
