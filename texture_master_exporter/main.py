@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QWidget, QPushButton, QDialog, QLabel, QCheckBox, QVBoxLayout, QHBoxLayout, QLineEdit, QFileDialog, QGroupBox
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout,QHBoxLayout, QPushButton, QLabel, QDialog, QFileDialog, QLineEdit
 from krita import DockWidget
 from .addcomponent import AddComponent
 
@@ -14,25 +14,50 @@ class exporterTextureMaster(DockWidget):
         self.initUI()
 
     def initUI(self):
-        self.layout = QVBoxLayout(self)
+        widget = QWidget(self)  # Create a central widget
+        self.setWidget(widget) 
 
-        # Add a stretchable space to push boxes to the bottom
-        self.layout.addStretch()
+        self.main_layout = QVBoxLayout(widget)
 
-        # Create a button to add boxes
-        self.addButton = QPushButton('Add Box', self)
-        self.addButton.clicked.connect(self.addBox)
-        self.layout.addWidget(self.addButton)
+        #calls
+        self.block_folder_path()
+
+        # Select Path to export files.
+    def block_folder_path(self):
+        app = Krita.instance()
+        self.h_layout_folder_path = QHBoxLayout()
+
+        self.line_edit_path = QLineEdit()  # Create a QLineEdit widget
+
+        self.button_folder = QPushButton('Select Folder', self)
+        self.button_folder.setIcon(app.icon('folder'))
+        self.button_folder.clicked.connect(self.selectFolder)
+
+        # Layout
+        self.h_layout_folder_path.addWidget(self.line_edit_path)
+        self.h_layout_folder_path.addWidget(self.button_folder)
+        self.main_layout.addLayout(self.h_layout_folder_path)
+
+        # # Create a button to add boxes
+        # self.addButton = QPushButton('Add Box', self)
+        # self.addButton.clicked.connect(self.addBox)
+        # self.main_layout.addWidget(self.addButton)    
+
+    def selectFolder(self):
+        options = QFileDialog.Options()
+        folderPath = QFileDialog.getExistingDirectory(self, "Select Folder", options=options)
+        if folderPath:
+            print("Selected Folder:", folderPath)
 
     def addBox(self):
+
         box = AddComponent()
         # insert the box before the Add Box button and stretchable space
-        self.layout.insertWidget(self.layout.count() - 2, box)
+        self.main_layout.insertWidget(self.main_layout.count() - 2, box)
         box.deleteButton.clicked.connect(lambda: self.deleteBox(box))
 
     def deleteBox(self, box):
-        box.setParent(None)
-        box.deleteLater()
+        pass
 
     # 'pass' means do not do anything
     def canvasChanged(self, canvas):
