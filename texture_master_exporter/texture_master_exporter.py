@@ -12,4 +12,3 @@ class DockerTemplate(DockWidget):
     # 'pass' means do not do anything
     def canvasChanged(self, canvas):
         pass
-
