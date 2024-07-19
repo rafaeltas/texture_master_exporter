@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QComboBox, QWidget, QFrame, QCheckBox, QListWidgetItem, QDialog
+from PyQt5.QtCore import Qt
 
 
 class AddComponent(QWidget):
@@ -9,13 +10,24 @@ class AddComponent(QWidget):
         self.materialPanel()
 
     def materialPanel(self):
+
+        app = Krita.instance()
+        self.layout_delete_button = QHBoxLayout()
+        self.layout_delete_button.setAlignment(Qt.AlignRight)
+        # self.layout_delete_button.addStretch() # Align button to right side.
+        self.deleteButton = QPushButton() #'Delete' Button
+        self.deleteButton.setIcon(app.icon('deletelayer'))
+        self.deleteButton.setFixedSize(self.deleteButton.sizeHint()) #Fit size of button by size of Icon.
+        self.layout_delete_button.addWidget(self.deleteButton)
+        self.layout_panel.addLayout(self.layout_delete_button)
+
         # Function Call
         self.texture_basic_info()
         self.texture_map_info()
         self.texture_normal_info()
 
-        self.deleteButton = QPushButton('Delete', self)
-        self.layout_panel.addWidget(self.deleteButton)
+        self.layout_panel.addStretch() # Get content to the top.
+
     
     def texture_basic_info(self):
         self.layout_texture_basic_info = QHBoxLayout()

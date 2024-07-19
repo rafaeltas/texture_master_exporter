@@ -26,6 +26,10 @@ class exporterTextureMaster(DockWidget):
         self.addButton = QPushButton('Add Box', self)
         self.addButton.clicked.connect(self.addBox)
         self.main_layout.addWidget(self.addButton)
+        
+        self.adjustSize() #Scyn size of Docker by content
+
+        # self.main_layout.addStretch() # Get content to the top.
 
     def block_folder_path(self):
         # Select Path to export files.
@@ -55,10 +59,14 @@ class exporterTextureMaster(DockWidget):
         # insert the box before the Add Box button and stretchable space
         self.main_layout.insertWidget(self.main_layout.count() - 2, box)
         box.deleteButton.clicked.connect(lambda: self.deleteBox(box))
+        self.adjustSize() #Scyn size of Docker by content
 
     def deleteBox(self, box):
         box.setParent(None)
         box.deleteLater()
+        
+        self.adjustSize() #Scyn size of Docker by content
+        self.main_layout.addStretch() # Get content to the top.
 
     # 'pass' means do not do anything
     def canvasChanged(self, canvas):
