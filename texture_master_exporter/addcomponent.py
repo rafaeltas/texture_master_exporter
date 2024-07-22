@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QComboBox, QWidget, QFrame, QCheckBox, QListWidgetItem, QDialog
+from PyQt5.QtWidgets import QApplication, QSizePolicy, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QComboBox, QWidget, QFrame, QCheckBox, QListWidgetItem, QDialog
 from PyQt5.QtCore import Qt
 
 
@@ -14,6 +14,7 @@ class AddComponent(QWidget):
         app = Krita.instance()
         self.layout_delete_button = QHBoxLayout()
         self.layout_delete_button.setAlignment(Qt.AlignRight)
+        
         # self.layout_delete_button.addStretch() # Align button to right side.
         self.deleteButton = QPushButton() #'Delete' Button
         self.deleteButton.setIcon(app.icon('deletelayer'))
