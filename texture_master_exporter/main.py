@@ -74,9 +74,15 @@ class exporterTextureMaster(DockWidget):
         box = AddComponent()
         # insert the box before the Add Box button and stretchable space
         texture_map_position = self.v_layout_texture_boxes.count() - 1
-        texture_map_data[f"{texture_map_position}"] = {"texture_name":"Rough"}
+        texture_map_data[f"{texture_map_position}"] = {"texture_name":"None"}
         self.v_layout_texture_boxes.insertWidget(self.v_layout_texture_boxes.count() - 1, box)
-        box.deleteButton.clicked.connect(lambda: self.deleteBox(box, texture_map_position))
+        
+        catch_basic_info = box.__init__(self.single_texture_map_data)
+        catch_basic_info[f"{texture_map_position}"] = {"texture_name":f"{self.changed_option}"}
+        
+        # box.texture_map_single_position = texture_map_position #set individual ID
+        
+        box.deleteButton.clicked.connect(lambda: self.deleteBox(box))
         self.adjustSize() #Scyn size of Docker by content
 
     def deleteBox(self, box, position):

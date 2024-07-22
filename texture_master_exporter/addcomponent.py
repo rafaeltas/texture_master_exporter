@@ -1,11 +1,14 @@
 from PyQt5.QtWidgets import QApplication, QSizePolicy, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QComboBox, QWidget, QFrame, QCheckBox, QListWidgetItem, QDialog
 from PyQt5.QtCore import Qt
 
-
 class AddComponent(QWidget):
+    
+    
     def __init__(self):
         super().__init__()
         self.layout_panel = QVBoxLayout(self)
+        self.single_texture_map_data = {}
+        
 
         self.materialPanel()
 
@@ -79,8 +82,13 @@ class AddComponent(QWidget):
 
         self.layout_panel.addLayout(self.layout_texture_map_info)
     
-    def comboBoxChanged(self):
-        pass
+    
+    
+    def comboBoxChanged(self, numberPosition):
+        self.changed_option = self.combo_box_map_type.currentText()
+        self.single_texture_map_data[f"{self.single_texture_map_data}"] = {"texture_name":f"{self.changed_option}"}
+        
+        
 
     def texture_normal_info(self):
         self.layout_texture_normal_info = QHBoxLayout()
