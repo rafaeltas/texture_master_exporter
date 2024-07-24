@@ -1,5 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout,QHBoxLayout, QPushButton, QLabel, QDialog, QFileDialog, QLineEdit, QSizePolicy
+from PyQt5.QtCore import Qt, QTimer
 from krita import DockWidget
 from .addcomponent import AddComponent
 from .exporter import ExportLayers
@@ -72,26 +73,19 @@ class exporterTextureMaster(DockWidget):
 
     def addBox(self):
         box = AddComponent()
-        # insert the box before the Add Box button and stretchable space
         texture_map_position = self.v_layout_texture_boxes.count() - 1
-        texture_map_data[f"{texture_map_position}"] = {"texture_name":"None"}
         self.v_layout_texture_boxes.insertWidget(self.v_layout_texture_boxes.count() - 1, box)
-        
-        catch_basic_info = box.__init__(self.single_texture_map_data)
-        catch_basic_info[f"{texture_map_position}"] = {"texture_name":f"{self.changed_option}"}
-        
-        # box.texture_map_single_position = texture_map_position #set individual ID
         
         box.deleteButton.clicked.connect(lambda: self.deleteBox(box))
         self.adjustSize() #Scyn size of Docker by content
 
-    def deleteBox(self, box, position):
+    def deleteBox(self,box):
         box.setParent(None)
         box.deleteLater()
-        del texture_map_data[f"{position}"]
-        
-        self.adjustSize() #Scyn size of Docker by content
-        self.main_layout.addStretch() # Get content to the top.
+        id_to_delete = box.id_texture
+        del texture_map_data[f"{id_to_delete}"]
+        self.adjustSize()  # Sync size of Docker by content
+        self.main_layout.addStretch()  # Get content to the top.
 
     # Export maps function
     def export_maps(self):

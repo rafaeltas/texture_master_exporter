@@ -29,13 +29,11 @@ class ExportLayers():
         pass
     
     def _debug_function(self):
-        
-        # data_map = texture_map_data["0"]["texture_name"]
 
-        #Add button and layout for button
         layoutForButtons = QHBoxLayout()
         data_as_string = str(texture_map_data)
-        newButton = QPushButton(f"Name Map is {texture_map_data}")
+        newButton = QPushButton(f"Name Map is {data_as_string}") 
+        # newButton = QPushButton(f"Name Map is {texture_map_data}")
         newButton.setIcon(app.icon('animation_play'))
         #newButton = QPushButton("Press me")
         layoutForButtons.addWidget(newButton)

@@ -1,5 +1,9 @@
 from PyQt5.QtWidgets import QApplication, QSizePolicy, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QComboBox, QWidget, QFrame, QCheckBox, QListWidgetItem, QDialog
 from PyQt5.QtCore import Qt
+from .textures_data import texture_map_data
+import random
+import string
+
 
 class AddComponent(QWidget):
     
@@ -7,11 +11,12 @@ class AddComponent(QWidget):
     def __init__(self):
         super().__init__()
         self.layout_panel = QVBoxLayout(self)
-        self.single_texture_map_data = {}
-        
-
         self.materialPanel()
-
+        self.id_texture = {}
+        self.data_teste = texture_map_data
+        self.random_ids()
+        
+        
     def materialPanel(self):
 
         app = Krita.instance()
@@ -32,6 +37,17 @@ class AddComponent(QWidget):
 
         self.layout_panel.addStretch() # Get content to the top.
 
+    
+    def random_ids(self):
+        letra = random.choice(string.ascii_uppercase)
+        numeros = random.randint(0, 999)
+        self.nova_id = f"{letra}{numeros:03}"
+            
+        if self.nova_id not in self.data_teste:
+            self.id_texture = f"{self.nova_id}"
+            self.data_teste[f"{self.nova_id}"] = {"texture_name":f"{self.id_texture}"}
+        else:
+            self.random_ids()
     
     def texture_basic_info(self):
         self.layout_texture_basic_info = QHBoxLayout()
@@ -84,9 +100,10 @@ class AddComponent(QWidget):
     
     
     
-    def comboBoxChanged(self, numberPosition):
-        self.changed_option = self.combo_box_map_type.currentText()
-        self.single_texture_map_data[f"{self.single_texture_map_data}"] = {"texture_name":f"{self.changed_option}"}
+    def comboBoxChanged(self):
+        # self.changed_option = self.combo_box_map_type.currentText()
+        # single_texture_map_data[f"{self.single_texture_map_data}"] = {"texture_name":f"{self.changed_option}"}
+        pass
         
         
 
