@@ -11,10 +11,10 @@ class AddComponent(QWidget):
     def __init__(self):
         super().__init__()
         self.layout_panel = QVBoxLayout(self)
-        self.materialPanel()
         self.id_texture = {}
         self.data_teste = texture_map_data
         self.random_ids()
+        self.materialPanel()
         
         
     def materialPanel(self):
@@ -45,7 +45,13 @@ class AddComponent(QWidget):
             
         if self.nova_id not in self.data_teste:
             self.id_texture = f"{self.nova_id}"
-            self.data_teste[f"{self.nova_id}"] = {"texture_name":f"{self.id_texture}"}
+            self.data_teste[f"{self.nova_id}"] = {"line_edit_sufix":"None",
+                                                  "combobox_format":"PNG",
+                                                  "combobox_scale":"100%",
+                                                  "combobox_type":"None",
+                                                  "checkbox_alpha":False                                            
+                                                  } # Data pattern
+            return self.id_texture
         else:
             self.random_ids()
     
@@ -62,16 +68,23 @@ class AddComponent(QWidget):
 
         # Image Format
         self.combo_box_format = QComboBox()
-        self.combo_box_format.addItems(['TGA', 'PNG', 'JPG', 'TIFF', 'PSD'])
-        self.combo_box_format.currentIndexChanged.connect(self.comboBoxChanged)
+        self.combo_box_format_list = ['TGA', 'PNG', 'JPG', 'TIFF', 'PSD']
+        self.combo_box_format.addItems(self.combo_box_format_list)
+        self.combo_box_format.setCurrentIndex(1)
+        
+        self.combo_box_format.currentIndexChanged.connect(self.combo_box_changed)
         self.layout_texture_basic_info.addWidget(self.combo_box_format)
+        
 
         # Image Scale
         self.combo_box_scale = QComboBox()
-        self.combo_box_scale.addItems(['200%', '100%', '50%', '25%', '12,5%'])
+        self.combo_box_scale_list = ['200%', '100%', '50%', '25%', '12,5%']
+        self.combo_box_scale.addItems(self.combo_box_scale_list)
         self.combo_box_scale.setCurrentIndex(1)
-        self.combo_box_scale.currentIndexChanged.connect(self.comboBoxChanged)
+        
+        self.combo_box_scale.currentIndexChanged.connect(self.combo_box_changed)
         self.layout_texture_basic_info.addWidget(self.combo_box_scale)
+        # self.data_teste[f"{self.nova_id}"] = {"combobox_scale":"100%"}
     
     def texture_map_info(self):
         self.layout_texture_map_info = QHBoxLayout()
@@ -80,11 +93,11 @@ class AddComponent(QWidget):
         self.layout_texture_map_info.addWidget(self.titleLabel)
 
         # Map Type
-        self.map_types_list = ['None', 'Color', 'Normal', 'Roughness', 'Metallic', 'Ambient Occlusion', 'Height', 'Mask', 'Emissive']
+        self.combo_box_map_type_list = ['None', 'Color', 'Normal', 'Roughness', 'Metallic', 'Ambient Occlusion', 'Height', 'Mask', 'Emissive']
         self.combo_box_map_type = QComboBox()
         self.combo_box_map_type.setCurrentIndex(0)
         
-        self.combo_box_map_type.currentIndexChanged.connect(self.comboBoxChanged)
+        self.combo_box_map_type.currentIndexChanged.connect(self.combo_box_changed)
         self.layout_texture_map_info.addWidget(self.combo_box_map_type)
 
         # Alpha channel
@@ -100,7 +113,25 @@ class AddComponent(QWidget):
     
     
     
-    def comboBoxChanged(self):
+    def combo_box_changed(self,value):#, key, value
+        
+        # Verify ID Texture individual and in textures data
+        if self.id_texture in self.data_teste:
+            if self.combo_box_format.currentText() in self.combo_box_format_list:
+                self.data_teste[f"{self.id_texture}"]["combobox_format"] = f"{self.combo_box_format.currentText()}"
+            # self.combo_box_format_list
+            # self.combo_box_scale_list
+            # self.combo_box_map_type_list
+            
+        
+        # Put the new "key" and new "value" in textures data
+        
+        
+        # self.changed_option = self.combo_box_map_type.currentText()
+        # single_texture_map_data[f"{self.single_texture_map_data}"] = {"texture_name":f"{self.changed_option}"}
+        pass
+    
+    def check_box_Changed(self):#, key, value
         # self.changed_option = self.combo_box_map_type.currentText()
         # single_texture_map_data[f"{self.single_texture_map_data}"] = {"texture_name":f"{self.changed_option}"}
         pass
@@ -125,11 +156,12 @@ class AddComponent(QWidget):
         if self.checkbox_alpha.isChecked() is True:
              # Remove specific items
             self.combo_box_map_type.clear() # Clear itens
-            self.map_types_list_alpha = [item for item in self.map_types_list if item not in ['None', 'Color', 'Normal']]
+            self.map_types_list_alpha = [item for item in self.combo_box_map_type_list if item not in ['None', 'Color', 'Normal']]
             self.combo_box_map_type.addItems(self.map_types_list_alpha)
         else:
             self.combo_box_map_type.clear() # Clear itens
-            self.combo_box_map_type.addItems(self.map_types_list)
+            self.combo_box_map_type.addItems(self.combo_box_map_type_list)
+
 
 
 
