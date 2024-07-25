@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt, QTimer
 from krita import DockWidget
 from .addcomponent import AddComponent
 from .exporter import ExportLayers
-from .textures_data import texture_map_data
+from .textures_data import texture_map_data, path_folder
 
 DOCKER_TITLE = 'Exporter Texture Master'
 
@@ -66,10 +66,13 @@ class exporterTextureMaster(DockWidget):
 
 
     def selectFolder(self):
+        self.path_folder = path_folder
         options = QFileDialog.Options()
         folderPath = QFileDialog.getExistingDirectory(self, "Select Folder", options=options)
         if folderPath:
             self.line_edit_path.setText(folderPath)
+            self.path_folder.append(self.line_edit_path.text())
+            
 
     def addBox(self):
         box = AddComponent()
