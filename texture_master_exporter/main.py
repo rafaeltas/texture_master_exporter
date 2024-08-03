@@ -85,8 +85,8 @@ class exporterTextureMaster(DockWidget):
     def deleteBox(self,box):
         box.setParent(None)
         box.deleteLater()
-        id_to_delete = box.id_texture
-        del texture_map_data[f"{id_to_delete}"]
+        self.id_target = box.id_texture
+        del texture_map_data[f"{self.id_target}"]
         self.adjustSize()  # Sync size of Docker by content
         self.main_layout.addStretch()  # Get content to the top.
 

@@ -58,20 +58,53 @@ class ExportLayers():
             currentDocument = Krita.instance().activeDocument()
 
             # setup some export parameters
-            exportParameters = InfoObject()
-            exportParameters.setProperty("alpha", True)
-            exportParameters.setProperty("compression", 6)  
-            exportParameters.setProperty("indexed", False)
+            self.exportParameters = InfoObject()
+            self.exportParameters.setProperty("alpha", True)
+            self.exportParameters.setProperty("compression", 6)  
+            self.exportParameters.setProperty("indexed", False)
             currentDocument.setBatchmode(False) # Change further
+            
+            for key, value in texture_map_data.items():             
+                # List all parameters to export image
+                # self.list_parameters = list(texture_map_data[f"{key}"].key())
+                # current_combobox_format = texture_map_data[f"{key}"][f"{single_parameter}"]
+                
+                image_sufix = texture_map_data[f"{key}"]["line_edit_sufix"]
+                image_format = texture_map_data[f"{key}"]["combobox_format"]
+                image_scale = texture_map_data[f"{key}"]["combobox_scale"]
+                image_type = texture_map_data[f"{key}"]["combobox_type"]
+                image_alpha = texture_map_data[f"{key}"]["checkbox_alpha"] # Boolean
+                
+                image_name = self.image_naming(str(image_sufix), str(image_type))
+                
+                # exportImage
+                currentDocument.exportImage(f'{self.path_folder[0]}/{image_name}.{image_format}', self.exportParameters )
 
-            # exportImage supports jpg and png
-            currentDocument.exportImage(f'{self.path_folder[0]}/export-image.png', exportParameters )
+    def image_naming(self, sufix, type):
         
+        # Set default name is the current file name
+        if sufix and type == "None":            
+            file_path = Krita.instance().activeDocument().fileName()
+            default_name = file_path.split('/')[-1]
+            return f"{default_name}"
         
+        if sufix and type != "None":
+            final_name = f"{sufix}_{type}"
+            return final_name
+        
+        if sufix =="None" and type != "None":
+            return (None, f"{type}")
+                    
+        # if sufix != "None":
+        #     return f"{sufix}"
+        
+        # if type != "None":
+        #     return f"{type}"
+            
     # DEBUG!!
     def _debug_function(self):
         layoutForButtons = QHBoxLayout()
-        data_as_string = str(path_folder)
+        data_as_string = str(texture_map_data)
         # newButton = QPushButton(f"Name Map is {data_as_string}")
         newButton = QPushButton(f"Name Map is {data_as_string}")
     

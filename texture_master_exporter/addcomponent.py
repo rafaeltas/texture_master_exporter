@@ -4,7 +4,6 @@ from .textures_data import texture_map_data
 import random
 import string
 
-
 class AddComponent(QWidget):
     
     
@@ -62,13 +61,15 @@ class AddComponent(QWidget):
         self.layout_texture_basic_info.addWidget(self.titleLabel)
 
         self.line_edit_sufix = QLineEdit()  # Create a QLineEdit widget
+        self.line_edit_sufix.textChanged.connect(self.line_edit_sufix_changed)
+        
         self.layout_texture_basic_info.addWidget(self.line_edit_sufix)
 
         self.layout_panel.addLayout(self.layout_texture_basic_info)
 
         # Image Format
         self.combo_box_format = QComboBox()
-        self.combo_box_format_list = ['TGA', 'PNG', 'JPG', 'TIFF', 'PSD']
+        self.combo_box_format_list = ['tga', 'png', 'jpg', 'tiff', 'psd']
         self.combo_box_format.addItems(self.combo_box_format_list)
         self.combo_box_format.setCurrentIndex(1)
         
@@ -112,16 +113,25 @@ class AddComponent(QWidget):
         self.layout_panel.addLayout(self.layout_texture_map_info)
     
     
-    
-    def combo_box_changed(self,value):#, key, value
+    def line_edit_sufix_changed(self, text):
+        # Set Sufix
+        self.data_teste[f"{self.id_texture}"]["line_edit_sufix"] = f"{text}"
+        if text == "":
+            self.data_teste[f"{self.id_texture}"]["line_edit_sufix"] = "None"
         
+    def combo_box_changed(self):#, key, value        
         # Verify ID Texture individual and in textures data
         if self.id_texture in self.data_teste:
+            # self.combo_box_format_list
             if self.combo_box_format.currentText() in self.combo_box_format_list:
                 self.data_teste[f"{self.id_texture}"]["combobox_format"] = f"{self.combo_box_format.currentText()}"
-            # self.combo_box_format_list
-            # self.combo_box_scale_list
+
             # self.combo_box_map_type_list
+            if self.combo_box_map_type.currentText() in self.combo_box_map_type_list:
+                self.data_teste[f"{self.id_texture}"]["combobox_type"] = f"{self.combo_box_map_type.currentText()}"
+            
+            
+            # self.combo_box_scale_list
             
         
         # Put the new "key" and new "value" in textures data
