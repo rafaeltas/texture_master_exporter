@@ -5,20 +5,6 @@ import os
 
 app = Krita.instance()  
 doc = app.activeDocument()
-    #     group_names = []
-    #     if node and node.childNodes():
-    #         for child in node.childNodes():
-    #             if child.type() == 'grouplayer':
-    #                 group_names.append(child.name())
-    #                 group_names.extend(get_group_layer_names(child))
-    #     return group_names
-
-    # if doc:
-    #     root = doc.rootNode()
-    #     group_names = get_group_layer_names(root)
-    #     print("Group layer names:", group_names)
-    # else:
-    #     print("No document is currently open.")
 
 class ExportLayers():
 
@@ -57,7 +43,7 @@ class ExportLayers():
         else:
             currentDocument = Krita.instance().activeDocument()
 
-            # setup some export parameters
+# setup some export parameters
             self.exportParameters = InfoObject()
             self.exportParameters.setProperty("alpha", True)
             self.exportParameters.setProperty("compression", 6)  
@@ -65,10 +51,7 @@ class ExportLayers():
             currentDocument.setBatchmode(False) # Change further
             
             for key, value in texture_map_data.items():             
-                # List all parameters to export image
-                # self.list_parameters = list(texture_map_data[f"{key}"].key())
-                # current_combobox_format = texture_map_data[f"{key}"][f"{single_parameter}"]
-                
+               
                 image_sufix = texture_map_data[f"{key}"]["line_edit_sufix"]
                 image_format = texture_map_data[f"{key}"]["combobox_format"]
                 image_scale = texture_map_data[f"{key}"]["combobox_scale"]
@@ -77,12 +60,17 @@ class ExportLayers():
                 
                 image_name = self.image_naming(str(image_sufix), str(image_type))
                 
-                # exportImage
+# exportImage
+                self.filter_by_groups_names(image_type)
                 currentDocument.exportImage(f'{self.path_folder[0]}/{image_name}.{image_format}', self.exportParameters )
-
-    def image_naming(self, sufix, type):
-        
-        # Set default name is the current file name
+                
+                topLevelLayers = currentDocument.topLevelNodes()    
+                for layers in topLevelLayers:    
+                    layers.setVisible(True) #Control visibility
+                    currentDocument.refreshProjection() # Refresh viewport to give feedback on screen
+                        
+    def image_naming(self, sufix, type):        
+# Set default name is the current file name
         if sufix and type == "None":            
             file_path = Krita.instance().activeDocument().fileName()
             default_name = file_path.split('/')[-1]
@@ -94,14 +82,27 @@ class ExportLayers():
         
         if sufix =="None" and type != "None":
             return (None, f"{type}")
-                    
-        # if sufix != "None":
-        #     return f"{sufix}"
-        
-        # if type != "None":
-        #     return f"{type}"
+
+
+# Filter all groupNodes(Top Group Layer)
+    def filter_by_groups_names(self, texturemap):
+        app = Krita.instance()
+        currentDoc = app.activeDocument()
+        topLevelLayers = currentDoc.topLevelNodes()
+    # Texture Maps Orders
+        texture_map = [f"{texturemap}"]
+    # Compare lists
+        lib_toplayers = []
+        for layers in topLevelLayers:    
+            lib_toplayers.append(layers.name())
+            export_list = [image_export for image_export in texture_map if image_export in lib_toplayers]
             
-    # DEBUG!!
+            if layers.name() not in export_list:
+                layers.setVisible(False) #Control visibility
+                currentDoc.refreshProjection() # Refresh viewport to give feedback on screen
+
+            
+# DEBUG!!
     def _debug_function(self):
         layoutForButtons = QHBoxLayout()
         data_as_string = str(texture_map_data)
